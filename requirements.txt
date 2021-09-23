@@ -5,3 +5,4 @@ transformers==4.10.2
 thefuzz
 sentence_transformers
 gensim
+tensorflow==2.6.0
