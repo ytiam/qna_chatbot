@@ -3,6 +3,7 @@
 
 import docx2txt
 from transformers import AutoTokenizer, TFAutoModelForQuestionAnswering
+from transformers import pipeline, AutoModelForQuestionAnswering, AutoTokenizer
 import glob
 from thefuzz import fuzz
 import transformers
@@ -29,12 +30,14 @@ import numpy as np
 
 @st.cache(allow_output_mutation=True,show_spinner=False)
 def load_qa_model():
-    nlp = pipeline("question-answering",model='distilbert-base-cased-distilled-squad')
+    model1 = AutoModelForQuestionAnswering.from_pretrained('models/distilbert-base-cased-distilled-squad/',local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained('models/distilbert-base-cased-distilled-squad/',local_files_only=True)
+    nlp = pipeline("question-answering",model=model1,tokenizer=tokenizer)
     return nlp
 
 @st.cache(allow_output_mutation=True,show_spinner=False)
 def load_qus_filtering_model():
-    model = SentenceTransformer('stsb-roberta-large')
+    model = SentenceTransformer('models/stsb-roberta-large/')
     return model
 
 @st.cache(allow_output_mutation=True,show_spinner=False,hash_funcs={StringIO: StringIO.getvalue}, suppress_st_warning=True)
